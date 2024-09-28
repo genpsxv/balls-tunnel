@@ -11,12 +11,12 @@ let tunnelWidth = 150;
 let tunnelCurves = [];
 let score = 0;
 let gameOver = false;
-let ballSpeed = 5;
+let ballSpeed = 3; // Reduced initial speed for mobile
 let tunnelSpeed = 1.5;
 let pointCounterPosition = { x: 10, y: 50 };
 let touchStartY = 0;
 let scrollDelta = 0;
-let gamepad = null; // For tracking gamepad input
+let gamepad = null;
 
 // Resize canvas to fit the screen adaptively
 function resizeCanvas() {
@@ -106,7 +106,7 @@ function update() {
 // Update ball position using mouse wheel, touch, and gamepad input
 function updateBallPosition() {
     handleGamepadInput(); // Handle gamepad input if connected
-    ball.y += scrollDelta * (ballSpeed / 5); // Adjust ball movement speed based on slider value
+    ball.y += scrollDelta * (ballSpeed / 10); // Further reduced sensitivity for smoother control
     scrollDelta = 0; // Reset scrollDelta after applying
 }
 
@@ -115,8 +115,8 @@ function handleGamepadInput() {
     const gamepads = navigator.getGamepads();
     if (gamepads[0]) {
         gamepad = gamepads[0];
-        const yAxis = gamepad.axes[1]; // Y-axis on most controllers
-        ball.y += yAxis * ballSpeed; // Adjust sensitivity for better control
+        const yAxis = gamepad.axes[1];
+        ball.y += yAxis * ballSpeed * 0.5; // Reduced gamepad sensitivity
     }
 }
 
@@ -186,13 +186,13 @@ canvas.addEventListener('touchstart', (e) => {
 canvas.addEventListener('touchmove', (e) => {
     const touchY = e.touches[0].clientY;
     const deltaY = touchY - touchStartY;
-    ball.y += deltaY * (ballSpeed / 5);
+    ball.y += deltaY * 0.2; // Reduced touch sensitivity for smoother control
     touchStartY = touchY;
 });
 
 // Handle mouse scroll input
 window.addEventListener('wheel', (e) => {
-    scrollDelta += e.deltaY * 0.1; // Adjust sensitivity if needed
+    scrollDelta += e.deltaY * 0.05; // Reduced scroll sensitivity
 });
 
 // Game loop function to control the gameplay
